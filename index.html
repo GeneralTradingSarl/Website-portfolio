@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TOKAI ELITE — Portfólio de Contas</title>
+    <meta name="description" content="Portfólio público de resultados de contas de trading — TOKAI ELITE">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <img src="logo_idea.jpg" alt="TOKAI ELITE" class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-title brand-slide">TOKAI ELITE</span>
+          <span class="brand-subtitle">Portfólio de Resultados</span>
+        </div>
+      </div>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="#tabela" class="nav-link">Tableau</a>
+        <a href="#accounts" class="nav-link">Portefeuille</a>
+      </nav>
+    </header>
+
+    <!-- Account profile modal -->
+    <div id="accountModal" class="modal-backdrop" hidden>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+        <button class="modal-close" id="accountModalClose" aria-label="Fechar">×</button>
+        <div class="modal-header">
+          <h3 id="accountModalTitle">Conta</h3>
+          <div class="modal-kpis" id="accountModalKpis"></div>
+        </div>
+        <div class="modal-body">
+          <div class="modal-tabs" role="tablist" aria-label="Seções do Perfil">
+            <button class="tab-btn" id="tab-analytics" data-tab="analytics" aria-selected="true">Analytics</button>
+            <button class="tab-btn" id="tab-advanced" data-tab="advanced">Advanced</button>
+            <button class="tab-btn" id="tab-trades" data-tab="trades">Trades</button>
+          </div>
+          <div id="tabpanel-analytics" class="tab-panel" role="tabpanel">
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+              <label for="modalMetricSelect" style="color:#a4b1c9;">Gráfico</label>
+              <select id="modalMetricSelect">
+                <option value="equity">Equidade</option>
+                <option value="balance">Saldo</option>
+                <option value="profit">Lucro mensal</option>
+                <option value="growth">Crescimento %</option>
+                <option value="drawdown">Drawdown %</option>
+              </select>
+            </div>
+            <div class="chart-wrap"><canvas id="modalMainCanvas"></canvas></div>
+            <div class="modal-charts" style="margin-top:12px;">
+              <div class="chart-section">
+                <h4>Hourly</h4>
+                <div class="chart-wrap" style="height:180px"><canvas id="modalHourlyCanvas"></canvas></div>
+              </div>
+              <div class="chart-section">
+                <h4>Daily</h4>
+                <div class="chart-wrap" style="height:180px"><canvas id="modalDailyCanvas"></canvas></div>
+              </div>
+              <div class="chart-section">
+                <h4>Risk of Ruin</h4>
+                <div class="chart-wrap" style="height:180px"><canvas id="modalRoRCanvas"></canvas></div>
+              </div>
+              <div class="chart-section">
+                <h4>Duration</h4>
+                <div class="chart-wrap" style="height:180px"><canvas id="modalDurationCanvas"></canvas></div>
+              </div>
+              <div class="chart-section">
+                <h4>MAE / MFE</h4>
+                <div class="chart-wrap" style="height:180px"><canvas id="modalMaeMfeCanvas"></canvas></div>
+              </div>
+            </div>
+          </div>
+          <div id="tabpanel-advanced" class="tab-panel" role="tabpanel" hidden>
+            <div id="advancedStatsContainer"></div>
+          </div>
+          <div id="tabpanel-trades" class="tab-panel" role="tabpanel" hidden>
+            <div id="tradesContainer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <section id="intro" class="intro">
+        <h1 class="visually-hidden">Portfólio de Contas de Trading</h1>
+        <p class="intro-text">Acompanhe o desempenho das contas de trading. Sem EAs ou APIs pagas — dados locais e públicos.</p>
+      </section>
+
+      <section id="tabela" class="panel">
+        <div class="panel-header">
+          <h2>Systèmes</h2>
+          <div class="panel-actions">
+            <button id="refreshBtn" class="btn">Atualizar</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" aria-describedby="tabela-descr">
+            <caption id="tabela-descr" class="visualmente-oculto">Lista de sistemas com métricas</caption>
+            <thead>
+              <tr>
+                <th>System</th>
+                <th>Gain</th>
+                <th>Drawdown</th>
+                <th>Monthly</th>
+                <th>Performance</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="accountsTableBody">
+              <!-- Preenchido via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="accounts" class="panel">
+        <div class="panel-header">
+          <h2>Desempenho Mensal por Conta</h2>
+        </div>
+        <div id="accountsGrid" class="accounts-grid">
+          <!-- Cartões por conta gerados via JS -->
+        </div>
+      </section>
+
+      
+    </main>
+
+    <footer class="site-footer">
+      <small>© <span id="year"></span> TOKAI ELITE. Todos os direitos reservados.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+  </body>
+  </html>
+
+

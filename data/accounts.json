@@ -1,0 +1,334 @@
+{
+  "accounts": [
+    {
+      "personName": "Amadou Diallo",
+      "name": "Conta Principal",
+      "totalDeposit": 50000,
+      "stats": {
+        "advanced": {
+          "trades": 304,
+          "profitability": null,
+          "pips": -358.8,
+          "avgWinPips": 12.62,
+          "avgWinCurrency": 236.70,
+          "avgLossPips": -32.01,
+          "avgLossCurrency": -293.68,
+          "lots": 440.77,
+          "commissions": 0,
+          "longsWon": { "won": 62, "total": 82 },
+          "shortsWon": { "won": 148, "total": 222 },
+          "bestTradeCurrency": { "date": "Sep 16", "value": 8240.99 },
+          "worstTradeCurrency": { "date": "Sep 16", "value": -1639.02 },
+          "bestTradePips": { "date": "Sep 16", "value": 43.7 },
+          "worstTradePips": { "date": "Sep 16", "value": -177.1 },
+          "avgTradeLength": "1d",
+          "profitFactor": 1.80,
+          "stdDev": 727.305,
+          "sharpe": 0,
+          "zScore": { "value": -4.62, "probability": 99.99 },
+          "expectancy": { "pips": -1.2, "currency": 72.70 },
+          "ahpr": 0.03,
+          "ghpr": 0.03
+        },
+        "info": {
+          "gain": 10.68,
+          "absGain": 9.80,
+          "daily": 0.11,
+          "monthly": 3.80,
+          "drawdown": 11.28,
+          "balance": 247685.90,
+          "equity": { "percent": 97.14, "value": 240592.50 },
+          "highest": { "date": "Sep 26", "value": 247685.91 },
+          "profit": 22100.92,
+          "interest": -4404.23,
+          "deposits": 225584.99,
+          "withdrawals": 0,
+          "updated": "1h",
+          "tracking": 0
+        }
+      },
+      "trades": [
+        { "id": "T001", "date": "2025-09-16", "symbol": "EURUSD", "side": "buy", "lots": 1.2, "pips": 43.7, "profit": 8240.99, "duration": 1440, "maePips": -12.3, "mfePips": 48.9, "hour": 10, "weekday": 2 },
+        { "id": "T002", "date": "2025-09-16", "symbol": "GBPUSD", "side": "sell", "lots": 0.8, "pips": -177.1, "profit": -1639.02, "duration": 720, "maePips": -200.2, "mfePips": 22.1, "hour": 15, "weekday": 2 }
+      ],
+      "monthly": [
+        { "month": "2025-01", "profit": 3200 },
+        { "month": "2025-02", "profit": -850 },
+        { "month": "2025-03", "profit": 1450 },
+        { "month": "2025-04", "profit": 2100 },
+        { "month": "2025-05", "profit": 980 },
+        { "month": "2025-06", "profit": 1820 },
+        { "month": "2025-07", "profit": 760 },
+        { "month": "2025-08", "profit": 1230 },
+        { "month": "2025-09", "profit": -300 },
+        { "month": "2025-10", "profit": 1675 },
+        { "month": "2025-11", "profit": 890 },
+        { "month": "2025-12", "profit": 1320 }
+      ]
+    },
+    {
+      "personName": "Mariam Bah",
+      "name": "Swing FX",
+      "totalDeposit": 20000,
+      "monthly": [
+        { "month": "2025-01", "profit": 500 },
+        { "month": "2025-02", "profit": 730 },
+        { "month": "2025-03", "profit": -250 },
+        { "month": "2025-04", "profit": 900 },
+        { "month": "2025-05", "profit": 400 },
+        { "month": "2025-06", "profit": 1200 },
+        { "month": "2025-07", "profit": -150 },
+        { "month": "2025-08", "profit": 300 },
+        { "month": "2025-09", "profit": 620 },
+        { "month": "2025-10", "profit": 480 },
+        { "month": "2025-11", "profit": 550 },
+        { "month": "2025-12", "profit": 610 }
+      ]
+    },
+    {
+      "personName": "Youssef El Amrani",
+      "name": "Índices Daytrade",
+      "totalDeposit": 15000,
+      "monthly": [
+        { "month": "2025-01", "profit": -300 },
+        { "month": "2025-02", "profit": 200 },
+        { "month": "2025-03", "profit": 350 },
+        { "month": "2025-04", "profit": 150 },
+        { "month": "2025-05", "profit": 420 },
+        { "month": "2025-06", "profit": -90 },
+        { "month": "2025-07", "profit": 180 },
+        { "month": "2025-08", "profit": 210 },
+        { "month": "2025-09", "profit": 75 },
+        { "month": "2025-10", "profit": 260 },
+        { "month": "2025-11", "profit": -120 },
+        { "month": "2025-12", "profit": 95 }
+      ]
+    },
+    {
+      "personName": "Fatou Diop",
+      "name": "Crypto Swing",
+      "totalDeposit": 12000,
+      "monthly": [
+        { "month": "2025-01", "profit": 900 },
+        { "month": "2025-02", "profit": -400 },
+        { "month": "2025-03", "profit": 1200 },
+        { "month": "2025-04", "profit": 600 },
+        { "month": "2025-05", "profit": 300 },
+        { "month": "2025-06", "profit": 1500 },
+        { "month": "2025-07", "profit": -350 },
+        { "month": "2025-08", "profit": 800 },
+        { "month": "2025-09", "profit": 450 },
+        { "month": "2025-10", "profit": 500 },
+        { "month": "2025-11", "profit": -200 },
+        { "month": "2025-12", "profit": 750 }
+      ]
+    },
+    {
+      "personName": "Jean-Pierre Laurent",
+      "name": "Commodities Trend",
+      "totalDeposit": 18000,
+      "monthly": [
+        { "month": "2025-01", "profit": 300 },
+        { "month": "2025-02", "profit": 220 },
+        { "month": "2025-03", "profit": 180 },
+        { "month": "2025-04", "profit": 260 },
+        { "month": "2025-05", "profit": -90 },
+        { "month": "2025-06", "profit": 340 },
+        { "month": "2025-07", "profit": 270 },
+        { "month": "2025-08", "profit": 150 },
+        { "month": "2025-09", "profit": 210 },
+        { "month": "2025-10", "profit": 190 },
+        { "month": "2025-11", "profit": 220 },
+        { "month": "2025-12", "profit": 260 }
+      ]
+    },
+    {
+      "personName": "Nguyen Thi Hoa",
+      "name": "Scalping Asia",
+      "totalDeposit": 10000,
+      "monthly": [
+        { "month": "2025-01", "profit": -120 },
+        { "month": "2025-02", "profit": 240 },
+        { "month": "2025-03", "profit": 110 },
+        { "month": "2025-04", "profit": 60 },
+        { "month": "2025-05", "profit": 130 },
+        { "month": "2025-06", "profit": -50 },
+        { "month": "2025-07", "profit": 95 },
+        { "month": "2025-08", "profit": 140 },
+        { "month": "2025-09", "profit": -70 },
+        { "month": "2025-10", "profit": 180 },
+        { "month": "2025-11", "profit": 160 },
+        { "month": "2025-12", "profit": 200 }
+      ]
+    },
+    {
+      "personName": "Ousmane Sarr",
+      "name": "Prop Challenge EU",
+      "totalDeposit": 25000,
+      "monthly": [
+        { "month": "2025-01", "profit": 800 },
+        { "month": "2025-02", "profit": 950 },
+        { "month": "2025-03", "profit": 1020 },
+        { "month": "2025-04", "profit": 700 },
+        { "month": "2025-05", "profit": 650 },
+        { "month": "2025-06", "profit": 1200 },
+        { "month": "2025-07", "profit": 900 },
+        { "month": "2025-08", "profit": -300 },
+        { "month": "2025-09", "profit": 400 },
+        { "month": "2025-10", "profit": 1100 },
+        { "month": "2025-11", "profit": 780 },
+        { "month": "2025-12", "profit": 900 }
+      ]
+    },
+    {
+      "personName": "Sofia Ribeiro",
+      "name": "ETF Hedging",
+      "totalDeposit": 30000,
+      "monthly": [
+        { "month": "2025-01", "profit": 250 },
+        { "month": "2025-02", "profit": 260 },
+        { "month": "2025-03", "profit": 270 },
+        { "month": "2025-04", "profit": 280 },
+        { "month": "2025-05", "profit": 290 },
+        { "month": "2025-06", "profit": 300 },
+        { "month": "2025-07", "profit": 310 },
+        { "month": "2025-08", "profit": 320 },
+        { "month": "2025-09", "profit": 330 },
+        { "month": "2025-10", "profit": 340 },
+        { "month": "2025-11", "profit": 350 },
+        { "month": "2025-12", "profit": 360 }
+      ]
+    },
+
+    { "personName": "Carlos Mendoza", "name": "Arbitrage LATAM", "totalDeposit": 22000,
+      "monthly": [
+        { "month": "2025-01", "profit": 600 },
+        { "month": "2025-02", "profit": 420 },
+        { "month": "2025-03", "profit": -180 },
+        { "month": "2025-04", "profit": 510 },
+        { "month": "2025-05", "profit": 300 },
+        { "month": "2025-06", "profit": 450 },
+        { "month": "2025-07", "profit": 700 },
+        { "month": "2025-08", "profit": -220 },
+        { "month": "2025-09", "profit": 380 },
+        { "month": "2025-10", "profit": 520 },
+        { "month": "2025-11", "profit": 610 },
+        { "month": "2025-12", "profit": 480 }
+      ]
+    },
+    { "personName": "Emma Dubois", "name": "Options Covered Calls", "totalDeposit": 14000,
+      "monthly": [
+        { "month": "2025-01", "profit": 200 },
+        { "month": "2025-02", "profit": 210 },
+        { "month": "2025-03", "profit": 190 },
+        { "month": "2025-04", "profit": 230 },
+        { "month": "2025-05", "profit": 240 },
+        { "month": "2025-06", "profit": 260 },
+        { "month": "2025-07", "profit": 250 },
+        { "month": "2025-08", "profit": 220 },
+        { "month": "2025-09", "profit": 210 },
+        { "month": "2025-10", "profit": 200 },
+        { "month": "2025-11", "profit": 230 },
+        { "month": "2025-12", "profit": 240 }
+      ]
+    },
+    { "personName": "David Kim", "name": "Futures Momentum", "totalDeposit": 26000,
+      "monthly": [
+        { "month": "2025-01", "profit": -500 },
+        { "month": "2025-02", "profit": 900 },
+        { "month": "2025-03", "profit": 1200 },
+        { "month": "2025-04", "profit": -350 },
+        { "month": "2025-05", "profit": 800 },
+        { "month": "2025-06", "profit": 1400 },
+        { "month": "2025-07", "profit": 300 },
+        { "month": "2025-08", "profit": 500 },
+        { "month": "2025-09", "profit": -200 },
+        { "month": "2025-10", "profit": 1000 },
+        { "month": "2025-11", "profit": 750 },
+        { "month": "2025-12", "profit": 950 }
+      ]
+    },
+    { "personName": "Lina Haddad", "name": "Gold Intraday", "totalDeposit": 16000,
+      "monthly": [
+        { "month": "2025-01", "profit": 300 },
+        { "month": "2025-02", "profit": -100 },
+        { "month": "2025-03", "profit": 450 },
+        { "month": "2025-04", "profit": 380 },
+        { "month": "2025-05", "profit": 120 },
+        { "month": "2025-06", "profit": 610 },
+        { "month": "2025-07", "profit": -80 },
+        { "month": "2025-08", "profit": 220 },
+        { "month": "2025-09", "profit": 330 },
+        { "month": "2025-10", "profit": 410 },
+        { "month": "2025-11", "profit": -60 },
+        { "month": "2025-12", "profit": 500 }
+      ]
+    },
+    { "personName": "Pedro Santos", "name": "EM FX Carry", "totalDeposit": 17000,
+      "monthly": [
+        { "month": "2025-01", "profit": 180 },
+        { "month": "2025-02", "profit": 220 },
+        { "month": "2025-03", "profit": 160 },
+        { "month": "2025-04", "profit": 140 },
+        { "month": "2025-05", "profit": 200 },
+        { "month": "2025-06", "profit": 190 },
+        { "month": "2025-07", "profit": 210 },
+        { "month": "2025-08", "profit": 230 },
+        { "month": "2025-09", "profit": 175 },
+        { "month": "2025-10", "profit": 160 },
+        { "month": "2025-11", "profit": 185 },
+        { "month": "2025-12", "profit": 195 }
+      ]
+    },
+    { "personName": "Olivia Khan", "name": "Mean Reversion US", "totalDeposit": 24000,
+      "monthly": [
+        { "month": "2025-01", "profit": -200 },
+        { "month": "2025-02", "profit": 300 },
+        { "month": "2025-03", "profit": 450 },
+        { "month": "2025-04", "profit": 200 },
+        { "month": "2025-05", "profit": -150 },
+        { "month": "2025-06", "profit": 600 },
+        { "month": "2025-07", "profit": 500 },
+        { "month": "2025-08", "profit": 350 },
+        { "month": "2025-09", "profit": 100 },
+        { "month": "2025-10", "profit": 420 },
+        { "month": "2025-11", "profit": 380 },
+        { "month": "2025-12", "profit": 520 }
+      ]
+    },
+    { "personName": "Noah Becker", "name": "AI Signals Beta", "totalDeposit": 13000,
+      "monthly": [
+        { "month": "2025-01", "profit": 700 },
+        { "month": "2025-02", "profit": 300 },
+        { "month": "2025-03", "profit": -600 },
+        { "month": "2025-04", "profit": 800 },
+        { "month": "2025-05", "profit": 500 },
+        { "month": "2025-06", "profit": -200 },
+        { "month": "2025-07", "profit": 900 },
+        { "month": "2025-08", "profit": 1000 },
+        { "month": "2025-09", "profit": -350 },
+        { "month": "2025-10", "profit": 750 },
+        { "month": "2025-11", "profit": 620 },
+        { "month": "2025-12", "profit": 880 }
+      ]
+    },
+    { "personName": "Hassan Ali", "name": "Bond Ladder", "totalDeposit": 21000,
+      "monthly": [
+        { "month": "2025-01", "profit": 90 },
+        { "month": "2025-02", "profit": 95 },
+        { "month": "2025-03", "profit": 100 },
+        { "month": "2025-04", "profit": 105 },
+        { "month": "2025-05", "profit": 110 },
+        { "month": "2025-06", "profit": 115 },
+        { "month": "2025-07", "profit": 120 },
+        { "month": "2025-08", "profit": 125 },
+        { "month": "2025-09", "profit": 130 },
+        { "month": "2025-10", "profit": 135 },
+        { "month": "2025-11", "profit": 140 },
+        { "month": "2025-12", "profit": 145 }
+      ]
+    }
+  ]
+}
+
+
