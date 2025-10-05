@@ -20,8 +20,8 @@
         </div>
       </div>
       <nav class="site-nav" aria-label="Navegação principal">
-        <a href="#tabela" class="nav-link">Tableau</a>
-        <a href="#accounts" class="nav-link">Portefeuille</a>
+        <a href="#tabela" class="nav-link">Tabela</a>
+        <a href="#accounts" class="nav-link">Portfólio</a>
       </nav>
     </header>
 
@@ -35,9 +35,9 @@
         </div>
         <div class="modal-body">
           <div class="modal-tabs" role="tablist" aria-label="Seções do Perfil">
-            <button class="tab-btn" id="tab-analytics" data-tab="analytics" aria-selected="true">Analytics</button>
-            <button class="tab-btn" id="tab-advanced" data-tab="advanced">Advanced</button>
-            <button class="tab-btn" id="tab-trades" data-tab="trades">Trades</button>
+            <button class="tab-btn" id="tab-analytics" data-tab="analytics" aria-selected="true">Análises</button>
+            <button class="tab-btn" id="tab-advanced" data-tab="advanced">Avançado</button>
+            <button class="tab-btn" id="tab-trades" data-tab="trades">Operações</button>
           </div>
           <div id="tabpanel-analytics" class="tab-panel" role="tabpanel">
             <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
@@ -53,19 +53,19 @@
             <div class="chart-wrap"><canvas id="modalMainCanvas"></canvas></div>
             <div class="modal-charts" style="margin-top:12px;">
               <div class="chart-section">
-                <h4>Hourly</h4>
+                <h4>Por Hora</h4>
                 <div class="chart-wrap" style="height:180px"><canvas id="modalHourlyCanvas"></canvas></div>
               </div>
               <div class="chart-section">
-                <h4>Daily</h4>
+                <h4>Diário</h4>
                 <div class="chart-wrap" style="height:180px"><canvas id="modalDailyCanvas"></canvas></div>
               </div>
               <div class="chart-section">
-                <h4>Risk of Ruin</h4>
+                <h4>Risco de Ruína</h4>
                 <div class="chart-wrap" style="height:180px"><canvas id="modalRoRCanvas"></canvas></div>
               </div>
               <div class="chart-section">
-                <h4>Duration</h4>
+                <h4>Duração</h4>
                 <div class="chart-wrap" style="height:180px"><canvas id="modalDurationCanvas"></canvas></div>
               </div>
               <div class="chart-section">
@@ -92,7 +92,7 @@
 
       <section id="tabela" class="panel">
         <div class="panel-header">
-          <h2>Systèmes</h2>
+          <h2>Sistemas</h2>
           <div class="panel-actions">
             <button id="refreshBtn" class="btn">Atualizar</button>
           </div>
@@ -102,11 +102,11 @@
             <caption id="tabela-descr" class="visualmente-oculto">Lista de sistemas com métricas</caption>
             <thead>
               <tr>
-                <th>System</th>
-                <th>Gain</th>
-                <th>Drawdown</th>
-                <th>Monthly</th>
-                <th>Performance</th>
+                <th>Sistema</th>
+                <th>Ganho</th>
+                <th>Rebaixamento</th>
+                <th>Mensal</th>
+                <th>Desempenho</th>
                 <th></th>
               </tr>
             </thead>

@@ -63,7 +63,7 @@
         { "month": "2025-09", "profit": -300 },
         { "month": "2025-10", "profit": 1675 },
         { "month": "2025-11", "profit": 890 },
-        { "month": "2025-12", "profit": 1320 }
+        { "month": "2025-12", "profit": -890 }
       ]
     },
     {
@@ -82,7 +82,7 @@
         { "month": "2025-09", "profit": 620 },
         { "month": "2025-10", "profit": 480 },
         { "month": "2025-11", "profit": 550 },
-        { "month": "2025-12", "profit": 610 }
+        { "month": "2025-12", "profit": -420 }
       ]
     },
     {
@@ -196,7 +196,7 @@
         { "month": "2025-09", "profit": 330 },
         { "month": "2025-10", "profit": 340 },
         { "month": "2025-11", "profit": 350 },
-        { "month": "2025-12", "profit": 360 }
+        { "month": "2025-12", "profit": -120 }
       ]
     },
 
@@ -229,7 +229,7 @@
         { "month": "2025-09", "profit": 210 },
         { "month": "2025-10", "profit": 200 },
         { "month": "2025-11", "profit": 230 },
-        { "month": "2025-12", "profit": 240 }
+        { "month": "2025-12", "profit": -150 }
       ]
     },
     { "personName": "David Kim", "name": "Futures Momentum", "totalDeposit": 26000,
@@ -261,7 +261,7 @@
         { "month": "2025-09", "profit": 330 },
         { "month": "2025-10", "profit": 410 },
         { "month": "2025-11", "profit": -60 },
-        { "month": "2025-12", "profit": 500 }
+        { "month": "2025-12", "profit": -260 }
       ]
     },
     { "personName": "Pedro Santos", "name": "EM FX Carry", "totalDeposit": 17000,
@@ -309,7 +309,7 @@
         { "month": "2025-09", "profit": -350 },
         { "month": "2025-10", "profit": 750 },
         { "month": "2025-11", "profit": 620 },
-        { "month": "2025-12", "profit": 880 }
+        { "month": "2025-12", "profit": -300 }
       ]
     },
     { "personName": "Hassan Ali", "name": "Bond Ladder", "totalDeposit": 21000,

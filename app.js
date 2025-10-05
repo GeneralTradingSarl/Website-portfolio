@@ -137,7 +137,7 @@ function renderTable(accounts) {
       el('td', {}, [el('span', { class: monthClass, text: percentFormatter.format((profitThisMonth) / (totalDeposit || 1)) })]),
       el('td', {}, [spark]),
       el('td', {}, [
-        el('button', { class: 'btn secondary', text: 'Ver perfil', id: `open-${index}` })
+          el('button', { class: 'btn secondary', text: 'Ver perfil', id: `open-${index}` })
       ])
     ]);
 
@@ -467,18 +467,18 @@ function renderAdvancedStats(account, container) {
     return tr;
   };
 
-  tbody.appendChild(row('Trades:', String(adv.trades), 'Longs Won:', `(${adv.longsWon.won}/${adv.longsWon.total}) ${Math.round(adv.longsWon.won/adv.longsWon.total*100)}%`));
-  tbody.appendChild(row('Profitability:', '', 'Shorts Won:', `(${adv.shortsWon.won}/${adv.shortsWon.total}) ${Math.round(adv.shortsWon.won/adv.shortsWon.total*100)}%`));
-  tbody.appendChild(row('Pips:', String(adv.pips), 'Best Trade (CNT):', `(${adv.bestTradeCurrency.date}) ${currencyFormatter.format(adv.bestTradeCurrency.value)}`));
-  tbody.appendChild(row('Average Win:', `${adv.avgWinPips} pips / ${currencyFormatter.format(adv.avgWinCurrency)}`, 'Worst Trade (CNT):', `(${adv.worstTradeCurrency.date}) ${currencyFormatter.format(adv.worstTradeCurrency.value)}`));
-  tbody.appendChild(row('Average Loss:', `${adv.avgLossPips} pips / ${currencyFormatter.format(adv.avgLossCurrency)}`, 'Best Trade (Pips):', `(${adv.bestTradePips.date}) ${adv.bestTradePips.value}`));
-  tbody.appendChild(row('Lots :', String(adv.lots), 'Worst Trade (Pips):', `(${adv.worstTradePips.date}) ${adv.worstTradePips.value}`));
-  tbody.appendChild(row('Commissions:', currencyFormatter.format(adv.commissions), 'Avg. Trade Length:', adv.avgTradeLength));
-  tbody.appendChild(row('', '', 'Profit Factor:', String(adv.profitFactor)));
-  tbody.appendChild(row('', '', 'Standard Deviation:', currencyFormatter.format(adv.stdDev)));
-  tbody.appendChild(row('', '', 'Sharpe Ratio', String(adv.sharpe)));
-  tbody.appendChild(row('', '', 'Z-Score (Probability):', `${adv.zScore.value} (${adv.zScore.probability}%)`));
-  tbody.appendChild(row('', '', 'Expectancy', `${adv.expectancy.pips} Pips / ${currencyFormatter.format(adv.expectancy.currency)}`));
+  tbody.appendChild(row('Operações:', String(adv.trades), 'Longos vencedores:', `(${adv.longsWon.won}/${adv.longsWon.total}) ${Math.round(adv.longsWon.won/adv.longsWon.total*100)}%`));
+  tbody.appendChild(row('Lucratividade:', '', 'Curtos vencedores:', `(${adv.shortsWon.won}/${adv.shortsWon.total}) ${Math.round(adv.shortsWon.won/adv.shortsWon.total*100)}%`));
+  tbody.appendChild(row('Pips:', String(adv.pips), 'Melhor trade (R$):', `(${adv.bestTradeCurrency.date}) ${currencyFormatter.format(adv.bestTradeCurrency.value)}`));
+  tbody.appendChild(row('Ganho médio:', `${adv.avgWinPips} pips / ${currencyFormatter.format(adv.avgWinCurrency)}`, 'Pior trade (R$):', `(${adv.worstTradeCurrency.date}) ${currencyFormatter.format(adv.worstTradeCurrency.value)}`));
+  tbody.appendChild(row('Perda média:', `${adv.avgLossPips} pips / ${currencyFormatter.format(adv.avgLossCurrency)}`, 'Melhor trade (pips):', `(${adv.bestTradePips.date}) ${adv.bestTradePips.value}`));
+  tbody.appendChild(row('Lotes:', String(adv.lots), 'Pior trade (pips):', `(${adv.worstTradePips.date}) ${adv.worstTradePips.value}`));
+  tbody.appendChild(row('Comissões:', currencyFormatter.format(adv.commissions), 'Duração média:', adv.avgTradeLength));
+  tbody.appendChild(row('', '', 'Fator de lucro:', String(adv.profitFactor)));
+  tbody.appendChild(row('', '', 'Desvio padrão:', currencyFormatter.format(adv.stdDev)));
+  tbody.appendChild(row('', '', 'Índice de Sharpe', String(adv.sharpe)));
+  tbody.appendChild(row('', '', 'Z-Score (Probabilidade):', `${adv.zScore.value} (${adv.zScore.probability}%)`));
+  tbody.appendChild(row('', '', 'Expectativa', `${adv.expectancy.pips} Pips / ${currencyFormatter.format(adv.expectancy.currency)}`));
   tbody.appendChild(row('', '', 'AHPR:', `${adv.ahpr}%`));
   tbody.appendChild(row('', '', 'GHPR:', `${adv.ghpr}%`));
 
@@ -519,21 +519,21 @@ function renderTradesTable(account, container) {
   });
   modalAuxCharts.push(ch);
   const table = el('table', { class: 'data-table' });
-  const thead = el('thead', {}, [el('tr', {}, [
-    el('th', { text: 'Date' }),
-    el('th', { text: 'Symbol' }),
-    el('th', { text: 'Side' }),
-    el('th', { text: 'Lots' }),
+    const thead = el('thead', {}, [el('tr', {}, [
+    el('th', { text: 'Data' }),
+    el('th', { text: 'Símbolo' }),
+    el('th', { text: 'Direção' }),
+    el('th', { text: 'Lotes' }),
     el('th', { text: 'Pips' }),
-    el('th', { text: 'Profit' }),
-    el('th', { text: 'Duration' })
+    el('th', { text: 'Lucro' }),
+    el('th', { text: 'Duração' })
   ])]);
   const tbody = el('tbody');
   trades.slice(0, 100).forEach(t => {
     const tr = el('tr', {}, [
       el('td', { text: t.date }),
       el('td', { text: t.symbol }),
-      el('td', { text: t.side }),
+      el('td', { text: t.side === 'buy' ? 'Compra' : 'Venda' }),
       el('td', { text: String(t.lots) }),
       el('td', { text: String(t.pips) }),
       el('td', { text: currencyFormatter.format(t.profit) }),
