@@ -445,14 +445,22 @@ function renderAdvancedStats(account, container) {
   const table = el('table', { class: 'data-table' });
   const tbody = el('tbody');
 
-  const winPct = Math.round((adv.longsWon.won + adv.shortsWon.won) / (adv.longsWon.total + adv.shortsWon.total) * 100);
+  const totalForWin = ((adv.longsWon && adv.longsWon.total) || 0) + ((adv.shortsWon && adv.shortsWon.total) || 0);
+  const winsCount = ((adv.longsWon && adv.longsWon.won) || 0) + ((adv.shortsWon && adv.shortsWon.won) || 0);
+  const winPct = totalForWin > 0 ? Math.round((winsCount / totalForWin) * 100) : 0;
   const profitabilityRow = () => {
+    // Colored band: left green (wins), right red (losses) + colored percentage chip
     const barWrap = el('div', { style: 'display:flex;align-items:center;gap:8px;' });
     const bar = el('div', { style: 'flex:1;height:10px;background:#2a3342;border-radius:999px;overflow:hidden;' });
-    const green = el('div', { style: `height:100%;width:${winPct}%;background:#17c964;float:left;` });
-    const red = el('div', { style: `height:100%;width:${100-winPct}%;background:#f31260;float:left;` });
+    const clamped = Math.max(0, Math.min(100, winPct));
+    const green = el('div', { style: `height:100%;width:${clamped}%;background:#17c964;float:left;` });
+    const red = el('div', { style: `height:100%;width:${100 - clamped}%;background:#f31260;float:left;` });
     bar.appendChild(green); bar.appendChild(red);
+    const chipColor = winPct >= 60 ? '#17c964' : (winPct >= 40 ? '#f5a524' : '#f31260');
+    const chipBg = winPct >= 60 ? 'rgba(23,201,100,0.15)' : (winPct >= 40 ? 'rgba(245,165,36,0.15)' : 'rgba(243,18,96,0.15)');
+    const chip = el('span', { style: `min-width:48px;text-align:center;padding:2px 8px;border-radius:999px;font-weight:600;color:${chipColor};background:${chipBg};` , text: `${winPct}%` });
     barWrap.appendChild(bar);
+    barWrap.appendChild(chip);
     return barWrap;
   };
 
@@ -460,7 +468,8 @@ function renderAdvancedStats(account, container) {
     const tr = el('tr');
     tr.appendChild(el('td', { text: leftLabel }));
     const tdL = el('td');
-    if (leftLabel === 'Profitability:') tdL.appendChild(profitabilityRow()); else tdL.textContent = leftValue;
+    const key = String(leftLabel || '').toLowerCase();
+    if (key.includes('profit') || key.includes('lucrat')) tdL.appendChild(profitabilityRow()); else tdL.textContent = leftValue;
     tr.appendChild(tdL);
     tr.appendChild(el('td', { text: rightLabel }));
     tr.appendChild(el('td', { text: rightValue }));
