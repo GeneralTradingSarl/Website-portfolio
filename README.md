@@ -1,49 +1,17 @@
-TOKAI ELITE — Portefeuille de Comptes
-=====================================
+TOKAI ELITE — Account Portfolio
+What is it?
 
-Qu’est‑ce que c’est ?
----------------------
-Site statique (HTML/CSS/JS) pour visualiser la performance des comptes de trading: tableau, profils avec statistiques avancées, historique des trades et graphiques (Chart.js via CDN). Aucune API payante.
+A static website (HTML / CSS / JS) to visualize trading account performance.
+Features include: table view, profile modal with advanced statistics, trade history, and charts (using Chart.js from CDN). No paid APIs required.
 
-Démarrage local
----------------
-- Ouvrir `index.html` dans votre navigateur.
-- Les données se trouvent dans `data/accounts.json`.
+Features
 
-Modifier les données
---------------------
-- Chaque compte: `{ personName, name, totalDeposit, monthly[], trades[], stats }`.
-- Si `trades` est vide, l’app génère des trades réalistes pour alimenter les stats et graphiques.
+Static, zero-backend site (works locally or on GitHub Pages)
 
-Déployer gratuitement (GitHub Pages)
------------------------------------
-1) Créez un dépôt public sur GitHub.
-2) En local (PowerShell):
-```bash
-cd "C:\Users\HP\Desktop\Job\Website"
-git init
-git branch -m main
-echo.> .nojekyll
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/<votre-user>/<votre-repo>.git
-git push -u origin main
-```
-3) Activez Pages: Repository → Settings → Pages → Source: Deploy from a branch → Branch: `main` / Folder: `/root` → Save.
+Account list and detailed profile modal
 
-URL
----
-Après 1–2 minutes: `https://<votre-user>.github.io/<votre-repo>/`
+Trade history and auto-generated realistic trades if an account's trades array is empty
 
-Structure
----------
-- `index.html`: UI + modale profil
-- `styles.css`: styles (thème sombre)
-- `app.js`: logique et graphiques
-- `data/accounts.json`: données locales
+Charts built with Chart.js (via CDN)
 
-Licence
--------
-Usage libre.
-
-
+Dark theme styles
