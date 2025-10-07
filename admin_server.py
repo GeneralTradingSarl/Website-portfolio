@@ -1,90 +1,50 @@
-#!/usr/bin/env python3
-"""
-Serveur simple pour permettre la sauvegarde des données admin
-"""
-
-import json
 import os
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
-import threading
-import webbrowser
+import json
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-class AdminHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/':
-            self.serve_file('index.html')
-        elif self.path.startswith('/data/'):
-            self.serve_file(self.path[1:])
-        elif self.path.startswith('/styles.css'):
-            self.serve_file('styles.css')
-        elif self.path.startswith('/app.js'):
-            self.serve_file('app.js')
-        else:
-            self.send_error(404)
-    
-    def do_POST(self):
-        if self.path == '/save-data':
-            self.save_data()
-        else:
-            self.send_error(404)
-    
-    def serve_file(self, filename):
-        try:
-            with open(filename, 'rb') as f:
-                content = f.read()
-            
-            # Déterminer le type de contenu
-            if filename.endswith('.html'):
-                content_type = 'text/html'
-            elif filename.endswith('.css'):
-                content_type = 'text/css'
-            elif filename.endswith('.js'):
-                content_type = 'application/javascript'
-            elif filename.endswith('.json'):
-                content_type = 'application/json'
-            else:
-                content_type = 'application/octet-stream'
-            
-            self.send_response(200)
-            self.send_header('Content-type', content_type)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(content)
-        except FileNotFoundError:
-            self.send_error(404)
-    
-    def save_data(self):
-        try:
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
-            
-            # Sauvegarder dans le fichier
-            with open('data/accounts.json', 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(b'{"success": true}')
-            
-            print(f"✅ Données sauvegardées avec succès!")
-            
-        except Exception as e:
-            self.send_response(500)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(f'{{"error": "{str(e)}"}}'.encode())
-            print(f"❌ Erreur lors de la sauvegarde: {e}")
+# Initialisation de l'application Flask
+app = Flask(__name__)
 
-def start_server():
-    server = HTTPServer(('localhost', 8001), AdminHandler)
-    print("🚀 Serveur admin démarré sur http://localhost:8001")
-    print("📝 Le panneau admin peut maintenant sauvegarder les données!")
-    print("🌐 Ouvrez http://localhost:8001 dans votre navigateur")
-    server.serve_forever()
+# Configuration du CORS pour autoriser les requêtes depuis n'importe quelle origine.
+# C'est le "laissez-passer" pour que votre frontend puisse parler au backend.
+CORS(app)
 
-if __name__ == "__main__":
-    start_server()
+# Le chemin où Render va stocker vos données de manière persistante.
+DATA_DIR = os.getenv('RENDER_DISK_PATH', 'data')
+ACCOUNTS_FILE = os.path.join(DATA_DIR, 'accounts.json')
+
+# Un "endpoint" simple pour vérifier que le serveur est bien en ligne.
+@app.route('/')
+def index():
+    return jsonify(status="ok", message="Admin server with Flask is running")
+
+# L'endpoint pour sauvegarder les données. Il n'accepte que les requêtes POST.
+@app.route('/save-data', methods=['POST'])
+def save_data():
+    try:
+        # Récupérer les données JSON envoyées par le frontend
+        data = request.get_json()
+        if not data:
+            return jsonify(error="No data provided"), 400
+
+        # S'assurer que le dossier de données existe
+        if not os.path.exists(DATA_DIR):
+            os.makedirs(DATA_DIR)
+
+        # Écrire les données dans le fichier accounts.json
+        with open(ACCOUNTS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+        print(f"✅ Données sauvegardées avec succès dans {ACCOUNTS_FILE}")
+        return jsonify(success=True)
+
+    except Exception as e:
+        print(f"❌ Erreur lors de la sauvegarde: {e}")
+        return jsonify(error=str(e)), 500
+
+# Cette partie est utile pour le test en local mais ne sera pas utilisée par Gunicorn
+if __name__ == '__main__':
+    # Le port est fourni par Render via une variable d'environnement, sinon on utilise 8001
+    port = int(os.environ.get('PORT', 8001))
+    app.run(host='0.0.0.0', port=port)
