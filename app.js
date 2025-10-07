@@ -137,17 +137,22 @@ function renderTable(accounts) {
       el('td', {}, [el('span', { class: monthClass, text: percentFormatter.format((profitThisMonth) / (totalDeposit || 1)) })]),
       el('td', {}, [spark]),
       el('td', {}, [
-          el('button', { class: 'btn secondary', text: 'Ver perfil', id: `open-${index}` })
+          el('button', { class: 'btn secondary open-profile', 'data-index': String(index), text: 'Ver perfil' })
       ])
     ]);
 
     tbody.appendChild(tr);
 
-    // wire open profile
-    setTimeout(() => {
-      const btn = document.getElementById(`open-${index}`);
-      if (btn) btn.addEventListener('click', () => openAccountModal(acc, index));
-    }, 0);
+  });
+
+  // Delegate clicks for profile open
+  tbody.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target && target.classList && target.classList.contains('open-profile')) {
+      const idx = Number(target.getAttribute('data-index'));
+      const selected = accounts[idx];
+      if (selected) openAccountModal(selected, idx);
+    }
   });
 }
 
@@ -174,7 +179,7 @@ function renderCharts(accounts) {
     const canvas = el('canvas');
     canvasWrap.appendChild(canvas);
     const actions = el('div', { class: 'card-actions' }, [
-      el('button', { class: 'btn secondary', 'data-acc': acc.name, id: `open-${Math.random().toString(36).slice(2)}` , text: 'Ver perfil' })
+      el('button', { class: 'btn secondary open-profile-card', 'data-index': String(index), text: 'Ver perfil' })
     ]);
 
     card.appendChild(title);
@@ -222,8 +227,17 @@ function renderCharts(accounts) {
       }
     });
 
-    // Open modal handler
-    actions.querySelector('button').addEventListener('click', () => openAccountModal(acc, index));
+    // Open modal handler via delegation on grid
+  });
+
+  // Delegate clicks for cards
+  grid.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target && target.classList && target.classList.contains('open-profile-card')) {
+      const idx = Number(target.getAttribute('data-index'));
+      const selected = accounts[idx];
+      if (selected) openAccountModal(selected, idx);
+    }
   });
 }
 
@@ -435,11 +449,8 @@ function wireModalClose() { /* Close handlers are attached per-open to also unlo
 function renderAdvancedStats(account, container) {
   if (!container) return;
   container.innerHTML = '';
-  let adv = account.stats && account.stats.advanced ? account.stats.advanced : null;
-  if (!adv) {
-    const trades = ensureTrades(account);
-    adv = deriveAdvancedFromTrades(trades);
-  }
+  const trades = ensureTrades(account);
+  const adv = deriveAdvancedFromTrades(trades);
 
   // Two-column table matching provided screenshot
   const table = el('table', { class: 'data-table' });
@@ -725,7 +736,7 @@ async function loadAdminData() {
   }
 }
 
-// Rendre le tableau des comptes admin
+// Rendre le tableau des comptes admin (pt-BR)
 function renderAdminAccountsTable(accounts) {
   const tbody = document.getElementById('adminAccountsTableBody');
   if (!tbody) return;
@@ -734,22 +745,61 @@ function renderAdminAccountsTable(accounts) {
   
   accounts.forEach((account, index) => {
     const tr = document.createElement('tr');
+    
+    // Statistiques avancées
+    // On calcule les statistiques à partir des trades pour être sûr d'avoir des données à jour
+    const trades = ensureTrades(account);
+    const stats = deriveAdvancedFromTrades(trades);
+    const statsText = `
+      <div class="stats-summary">
+        <div><strong>Operações:</strong> ${stats.trades || 0}</div>
+        <div><strong>Pips:</strong> ${stats.pips || 0}</div>
+        <div><strong>Fator de Lucro:</strong> ${stats.profitFactor || 0}</div>
+        <div><strong>Lotes:</strong> ${stats.lots || 0}</div>
+      </div>
+    `;
+    
     tr.innerHTML = `
-      <td>
-        <input type="text" class="edit-input" value="${account.name || ''}" 
-               data-field="name" data-index="${index}">
-      </td>
       <td>
         <input type="text" class="edit-input" value="${account.personName || ''}" 
                data-field="personName" data-index="${index}">
+      </td>
+      <td>
+        <input type="text" class="edit-input" value="${account.name || ''}" 
+               data-field="name" data-index="${index}">
       </td>
       <td>
         <input type="number" class="edit-input" value="${account.totalDeposit || 0}" 
                data-field="totalDeposit" data-index="${index}">
       </td>
       <td>
+        <div class="stats-editor">
+          <div class="stats-row">
+            <label>Operações:</label>
+            <input type="number" class="edit-input small" value="${stats.trades || 0}" 
+                   data-field="stats.advanced.trades" data-index="${index}">
+          </div>
+          <div class="stats-row">
+            <label>Pips:</label>
+            <input type="number" class="edit-input small" value="${stats.pips || 0}" 
+                   data-field="stats.advanced.pips" data-index="${index}">
+          </div>
+          <div class="stats-row">
+            <label>Fator de Lucro:</label>
+            <input type="number" class="edit-input small" value="${stats.profitFactor || 0}" 
+                   data-field="stats.advanced.profitFactor" data-index="${index}">
+          </div>
+          <div class="stats-row">
+            <label>Lots:</label>
+            <input type="number" class="edit-input small" value="${stats.lots || 0}" 
+                   data-field="stats.advanced.lots" data-index="${index}">
+          </div>
+        </div>
+      </td>
+      <td>
         <div class="action-buttons">
-          <button class="btn small danger" onclick="deleteAccount(${index})">Supprimer</button>
+          <button class="btn small secondary" onclick="editAccountDetails(${index})">Detalhes</button>
+          <button class="btn small danger" onclick="deleteAccount(${index})">Excluir</button>
         </div>
       </td>
     `;
@@ -807,8 +857,8 @@ function addNewAccount() {
   if (!accountsData) return;
   
   const newAccount = {
-    personName: 'Nouveau Trader',
-    name: 'Nouveau Compte',
+    personName: 'Nuevo trader',
+    name: 'Nueva cuenta',
     totalDeposit: 10000,
     monthly: []
   };
@@ -820,7 +870,7 @@ function addNewAccount() {
 
 // Supprimer un compte
 function deleteAccount(index) {
-  if (!accountsData || !confirm('Êtes-vous sûr de vouloir supprimer ce compte ?')) return;
+  if (!accountsData || !confirm('¿Está seguro de que desea eliminar esta cuenta?')) return;
   
   accountsData.accounts.splice(index, 1);
   renderAdminAccountsTable(accountsData.accounts);
@@ -850,10 +900,282 @@ function addMonthlyData() {
 
 // Supprimer des données mensuelles
 function deleteMonthlyData(accountIndex, monthIndex) {
-  if (!accountsData || !confirm('Êtes-vous sûr de vouloir supprimer ces données ?')) return;
+  if (!accountsData || !confirm('¿Está seguro de que desea eliminar estos datos?')) return;
   
   accountsData.accounts[accountIndex].monthly.splice(monthIndex, 1);
   renderMonthlyTable(accountIndex);
+}
+
+// Éditer les détails d'un compte (inclui estatísticas e histórico de operações)
+function editAccountDetails(accountIndex) {
+  if (!accountsData || !accountsData.accounts[accountIndex]) return;
+  
+  const account = accountsData.accounts[accountIndex];
+  const stats = account.stats?.advanced || {};
+  
+  // Créer un modal de détails
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop';
+  modal.innerHTML = `
+    <div class="modal-dialog" style="max-width: 980px;">
+      <button class="modal-close" onclick="this.closest('.modal-backdrop').remove()">×</button>
+      <div class="modal-header">
+        <h3>Detalhes da conta: ${account.personName || 'N/A'}</h3>
+      </div>
+      <div class="modal-body">
+        <div class="account-details">
+          <div class="detail-section">
+            <h4>Informações básicas</h4>
+            <div class="detail-row">
+              <label>Nome da pessoa:</label>
+              <input type="text" class="edit-input" value="${account.personName || ''}" 
+                     data-field="personName" data-index="${accountIndex}">
+            </div>
+            <div class="detail-row">
+              <label>Nome da conta:</label>
+              <input type="text" class="edit-input" value="${account.name || ''}" 
+                     data-field="name" data-index="${accountIndex}">
+            </div>
+            <div class="detail-row">
+              <label>Depósito total:</label>
+              <input type="number" class="edit-input" value="${account.totalDeposit || 0}" 
+                     data-field="totalDeposit" data-index="${accountIndex}">
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h4>Estatísticas avançadas</h4>
+            <div class="stats-grid">
+              <div class="detail-row">
+                <label>Operações:</label>
+                <input type="number" class="edit-input" value="${stats.trades || 0}" 
+                       data-field="stats.advanced.trades" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Pips:</label>
+                <input type="number" class="edit-input" value="${stats.pips || 0}" 
+                       data-field="stats.advanced.pips" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Fator de Lucro:</label>
+                <input type="number" class="edit-input" value="${stats.profitFactor || 0}" 
+                       data-field="stats.advanced.profitFactor" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Lots:</label>
+                <input type="number" class="edit-input" value="${stats.lots || 0}" 
+                       data-field="stats.advanced.lots" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Comissões:</label>
+                <input type="number" class="edit-input" value="${stats.commissions || 0}" 
+                       data-field="stats.advanced.commissions" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Lucros médios (moeda):</label>
+                <input type="number" class="edit-input" value="${stats.avgWinCurrency || 0}" 
+                       data-field="stats.advanced.avgWinCurrency" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Perdas médias (moeda):</label>
+                <input type="number" class="edit-input" value="${stats.avgLossCurrency || 0}" 
+                       data-field="stats.advanced.avgLossCurrency" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Expectativa (moeda):</label>
+                <input type="number" class="edit-input" value="${(stats.expectancy && stats.expectancy.currency) || 0}" 
+                       data-field="stats.advanced.expectancy.currency" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>Expectativa (pips):</label>
+                <input type="number" class="edit-input" value="${(stats.expectancy && stats.expectancy.pips) || 0}" 
+                       data-field="stats.advanced.expectancy.pips" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>AHPR:</label>
+                <input type="number" class="edit-input" value="${stats.ahpr || 0}" 
+                       data-field="stats.advanced.ahpr" data-index="${accountIndex}">
+              </div>
+              <div class="detail-row">
+                <label>GHPR:</label>
+                <input type="number" class="edit-input" value="${stats.ghpr || 0}" 
+                       data-field="stats.advanced.ghpr" data-index="${accountIndex}">
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h4>Histórico de operações</h4>
+            <div class="admin-table-container">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Ativo</th>
+                    <th>Direção</th>
+                    <th>Lotes</th>
+                    <th>Pips</th>
+                    <th>Lucro</th>
+                    <th>Duração (min)</th>
+                    <th>MAE</th>
+                    <th>MFE</th>
+                    <th>Hora</th>
+                    <th>Dia</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tradesTableBody">
+                  ${(Array.isArray(account.trades) ? account.trades : []).map((t, i) => `
+                    <tr>
+                      <td><input class="edit-input small" type="text" value="${t.date || ''}" data-field="trade.date" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="text" value="${t.symbol || ''}" data-field="trade.symbol" data-trade="${i}"></td>
+                      <td>
+                        <select class="edit-input small" data-field="trade.side" data-trade="${i}">
+                          <option value="buy" ${t.side==='buy'?'selected':''}>Compra</option>
+                          <option value="sell" ${t.side==='sell'?'selected':''}>Venda</option>
+                        </select>
+                      </td>
+                      <td><input class="edit-input small" type="number" step="0.01" value="${t.lots || 0}" data-field="trade.lots" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" step="0.1" value="${t.pips || 0}" data-field="trade.pips" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" step="0.01" value="${t.profit || 0}" data-field="trade.profit" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" value="${t.duration || 0}" data-field="trade.duration" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" step="0.1" value="${t.maePips || 0}" data-field="trade.maePips" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" step="0.1" value="${t.mfePips || 0}" data-field="trade.mfePips" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" value="${t.hour ?? ''}" data-field="trade.hour" data-trade="${i}"></td>
+                      <td><input class="edit-input small" type="number" value="${t.weekday ?? ''}" data-field="trade.weekday" data-trade="${i}"></td>
+                      <td><button class="btn small danger" onclick="deleteTradeRow(${accountIndex}, ${i}, this)">Excluir</button></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions">
+              <button class="btn" onclick="addTradeRow(${accountIndex}, this)">Adicionar operação</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn primary" onclick="saveAccountDetails(${accountIndex}); this.closest('.modal-backdrop').remove();">Salvar</button>
+          <button class="btn secondary" onclick="this.closest('.modal-backdrop').remove();">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  document.body.classList.add('modal-open');
+}
+
+// Sauvegarder les détails d'un compte
+// Sauvegarder les détails d'un compte
+function saveAccountDetails(accountIndex) {
+  if (!accountsData || !accountsData.accounts[accountIndex]) return;
+  
+  // Mettre à jour les données depuis les inputs du modal
+  const modal = document.querySelector('.modal-backdrop');
+  const inputs = modal.querySelectorAll('input[data-field], select[data-field]');
+  
+  inputs.forEach(input => {
+    const field = input.dataset.field;
+    const value = input.value;
+    
+    if (field === 'totalDeposit') {
+      accountsData.accounts[accountIndex][field] = parseFloat(value) || 0;
+    } else if (field === 'personName' || field === 'name') {
+      accountsData.accounts[accountIndex][field] = value;
+    } else if (field.startsWith('stats.advanced.')) {
+      const statField = field.replace('stats.advanced.', '');
+      if (!accountsData.accounts[accountIndex].stats) {
+        accountsData.accounts[accountIndex].stats = { advanced: {} };
+      }
+      if (!accountsData.accounts[accountIndex].stats.advanced) {
+        accountsData.accounts[accountIndex].stats.advanced = {};
+      }
+      // nested expectancy fields
+      if (statField.startsWith('expectancy.')) {
+        const key = statField.split('.')[1];
+        if (!accountsData.accounts[accountIndex].stats.advanced.expectancy) {
+          accountsData.accounts[accountIndex].stats.advanced.expectancy = { pips: 0, currency: 0 };
+        }
+        accountsData.accounts[accountIndex].stats.advanced.expectancy[key] = parseFloat(value) || 0;
+      } else {
+        accountsData.accounts[accountIndex].stats.advanced[statField] = parseFloat(value) || 0;
+      }
+    } else if (field.startsWith('trade.')) {
+      const tradeIndex = parseInt(input.dataset.trade);
+      const key = field.replace('trade.', '');
+      if (!Array.isArray(accountsData.accounts[accountIndex].trades)) {
+        accountsData.accounts[accountIndex].trades = [];
+      }
+      const t = accountsData.accounts[accountIndex].trades[tradeIndex] || {};
+      if (['lots','pips','profit','duration','maePips','mfePips','hour','weekday'].includes(key)) {
+        t[key] = input.value === '' ? null : parseFloat(input.value);
+      } else if (key === 'side') {
+        t[key] = input.value === 'sell' ? 'sell' : 'buy';
+      } else {
+        t[key] = input.value;
+      }
+      // simple id fallback
+      if (!t.id) t.id = `E${String(tradeIndex+1).padStart(3,'0')}`;
+      accountsData.accounts[accountIndex].trades[tradeIndex] = t;
+    }
+  });
+  
+  // Recharger le tableau principal en arrière-plan pour refléter les changements
+  renderAdminAccountsTable(accountsData.accounts);
+  
+  // --- BLOC DE SAUVEGARDE AJOUTÉ DIRECTEMENT ICI ---
+  (async () => {
+    try {
+      const payload = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(accountsData)
+      };
+      let ok = false;
+      try {
+        const response = await fetch('/save-data', payload);
+        ok = response.ok && (await response.json()).success === true;
+      } catch {}
+      if (!ok) {
+        try {
+          const response2 = await fetch('http://localhost:8001/save-data', payload);
+          ok = response2.ok && (await response2.json()).success === true;
+        } catch {}
+      }
+      if (ok) {
+        alert('✅ ¡Detalles guardados con éxito!');
+        // Recharger les données publiques pour voir les changements
+        const data = await loadAccounts();
+        renderTable(data.accounts);
+        renderCharts(data.accounts);
+      } else {
+        alert('❌ Erreur lors de la sauvegarde. Vérifiez le serveur admin.');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde des détails:', error);
+      alert('❌ Erreur lors de la sauvegarde. Vérifiez que le serveur admin est démarré.');
+    }
+  })();
+}
+// Adicionar/remover linhas de operações
+function addTradeRow(accountIndex, btn) {
+  if (!accountsData || !accountsData.accounts[accountIndex]) return;
+  if (!Array.isArray(accountsData.accounts[accountIndex].trades)) {
+    accountsData.accounts[accountIndex].trades = [];
+  }
+  const trades = accountsData.accounts[accountIndex].trades;
+  trades.push({ date: '', symbol: '', side: 'buy', lots: 0, pips: 0, profit: 0, duration: 0 });
+  // re-open modal to refresh table quickly
+  btn.closest('.modal-backdrop').remove();
+  editAccountDetails(accountIndex);
+}
+
+function deleteTradeRow(accountIndex, tradeIndex, btn) {
+  if (!accountsData || !accountsData.accounts[accountIndex]) return;
+  const trades = accountsData.accounts[accountIndex].trades || [];
+  trades.splice(tradeIndex, 1);
+  btn.closest('tr').remove();
 }
 
 // Sauvegarder les modifications
@@ -864,25 +1186,36 @@ async function saveAdminChanges() {
     // Mettre à jour les données depuis les inputs
     updateDataFromInputs();
     
-    // Sauvegarder dans le fichier (simulation - en réalité il faudrait un serveur)
-    const response = await fetch('data/accounts.json', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    // Sauvegarder via le serveur (tentativa no mesmo host, fallback 8001)
+    const payload = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(accountsData)
-    });
-    
-    if (response.ok) {
-      alert('Modifications sauvegardées avec succès !');
-      // Recharger les données
-      bootstrap();
-    } else {
-      alert('Erreur lors de la sauvegarde. Les modifications sont temporaires.');
+    };
+    let ok = false;
+    try {
+      const response = await fetch('/save-data', payload);
+      ok = response.ok && (await response.json()).success === true;
+    } catch {}
+    if (!ok) {
+      try {
+        const response2 = await fetch('http://localhost:8001/save-data', payload);
+        ok = response2.ok && (await response2.json()).success === true;
+      } catch {}
     }
+    if (ok) {
+      alert('✅ Données sauvegardées avec succès !');
+      // Recharger les données pour voir les changements
+      const data = await loadAccounts();
+      renderTable(data.accounts);
+      renderCharts(data.accounts);
+    } else {
+      alert('❌ Erreur lors de la sauvegarde. Vérifiez le serveur admin.');
+    }
+    
   } catch (error) {
     console.error('Erreur lors de la sauvegarde:', error);
-    alert('Erreur lors de la sauvegarde. Les modifications sont temporaires.');
+    alert('❌ Erreur lors de la sauvegarde. Vérifiez que le serveur admin est démarré.');
   }
 }
 
@@ -897,10 +1230,24 @@ function updateDataFromInputs() {
     const index = parseInt(input.dataset.index);
     
     if (accountsData.accounts[index]) {
+      // Gérer les champs simples
       if (field === 'totalDeposit') {
         accountsData.accounts[index][field] = parseFloat(input.value) || 0;
-      } else {
+      } else if (field === 'personName' || field === 'name') {
         accountsData.accounts[index][field] = input.value;
+      }
+      // Gérer les statistiques avancées
+      else if (field.startsWith('stats.advanced.')) {
+        const statField = field.replace('stats.advanced.', '');
+        if (!accountsData.accounts[index].stats) {
+          accountsData.accounts[index].stats = { advanced: {} };
+        }
+        if (!accountsData.accounts[index].stats.advanced) {
+          accountsData.accounts[index].stats.advanced = {};
+        }
+        
+        const value = parseFloat(input.value) || 0;
+        accountsData.accounts[index].stats.advanced[statField] = value;
       }
     }
   });
@@ -1045,5 +1392,9 @@ function initAdminEvents() {
 
 // Initialiser les événements admin
 initAdminEvents();
+
+// TEMPORAIRE : Afficher le lien admin pour les tests
+// À supprimer en production
+showAdminLink();
 
 
