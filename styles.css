@@ -48,6 +48,216 @@ body {
 /* sliding emphasis for brand */
 .brand-slide { position: relative; display: inline-block; }
 .brand-slide::after { content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 100%; background: linear-gradient(90deg,var(--blue),transparent); animation: slide 2.8s infinite; }
+
+/* Admin styles */
+.admin-link {
+  background: linear-gradient(135deg, #f31260, #ff6b9d);
+  color: white !important;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.admin-link:hover {
+  background: linear-gradient(135deg, #e0115a, #ff5a8a);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(243, 18, 96, 0.3);
+}
+
+.admin-modal {
+  max-width: 90vw;
+  width: 1200px;
+  max-height: 90vh;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-tabs .tab-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 12px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.admin-tabs .tab-btn.active,
+.admin-tabs .tab-btn:hover {
+  color: var(--text);
+  border-bottom-color: var(--blue);
+}
+
+.admin-tab-panel {
+  min-height: 400px;
+}
+
+.admin-table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table th {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-table td {
+  color: var(--muted);
+}
+
+.admin-table tr:hover {
+  background: rgba(31, 111, 235, 0.05);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.monthly-editor {
+  padding: 20px 0;
+}
+
+.account-selector {
+  margin-bottom: 24px;
+}
+
+.monthly-table-container {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.btn {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: #1a5fd4;
+  transform: translateY(-1px);
+}
+
+.btn.secondary {
+  background: var(--muted);
+  color: var(--bg);
+}
+
+.btn.secondary:hover {
+  background: #8a9bb8;
+}
+
+.btn.primary {
+  background: var(--success);
+}
+
+.btn.primary:hover {
+  background: #15b357;
+}
+
+.btn.danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn.danger:hover {
+  background: #e0115a;
+}
+
+.btn.small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-input {
+  background: var(--bg);
+  border: 1px solid var(--blue);
+  color: var(--text);
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.edit-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(31, 111, 235, 0.2);
+}
 @keyframes slide { 0% { transform: translateX(-100%); } 50% { transform: translateX(0%); } 100% { transform: translateX(100%); } }
 
 .site-nav { display: flex; gap: 14px; }

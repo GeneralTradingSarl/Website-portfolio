@@ -645,4 +645,405 @@ document.getElementById('refreshBtn').addEventListener('click', bootstrap);
 wireModalClose();
 bootstrap();
 
+// ========== ADMIN PANEL FUNCTIONALITY ==========
+
+// Configuration admin
+const ADMIN_PASSWORD = 'admin123'; // Mot de passe par défaut - à changer en production
+let isAdminAuthenticated = false;
+let accountsData = null;
+
+// Fonction pour afficher le lien admin
+function showAdminLink() {
+  const adminLink = document.getElementById('adminLink');
+  if (adminLink) {
+    adminLink.style.display = 'block';
+  }
+}
+
+// Fonction pour masquer le lien admin
+function hideAdminLink() {
+  const adminLink = document.getElementById('adminLink');
+  if (adminLink) {
+    adminLink.style.display = 'none';
+  }
+}
+
+// Authentification admin
+function authenticateAdmin(password) {
+  return password === ADMIN_PASSWORD;
+}
+
+// Ouvrir le modal d'authentification
+function openAdminAuth() {
+  const modal = document.getElementById('adminAuthModal');
+  if (modal) {
+    modal.removeAttribute('hidden');
+    document.body.classList.add('modal-open');
+    document.getElementById('adminPassword').focus();
+  }
+}
+
+// Fermer le modal d'authentification
+function closeAdminAuth() {
+  const modal = document.getElementById('adminAuthModal');
+  if (modal) {
+    modal.setAttribute('hidden', '');
+    document.body.classList.remove('modal-open');
+    document.getElementById('adminPassword').value = '';
+  }
+}
+
+// Ouvrir le panneau admin
+function openAdminPanel() {
+  const modal = document.getElementById('adminPanelModal');
+  if (modal) {
+    modal.removeAttribute('hidden');
+    document.body.classList.add('modal-open');
+    loadAdminData();
+  }
+}
+
+// Fermer le panneau admin
+function closeAdminPanel() {
+  const modal = document.getElementById('adminPanelModal');
+  if (modal) {
+    modal.setAttribute('hidden', '');
+    document.body.classList.remove('modal-open');
+  }
+}
+
+// Charger les données pour l'admin
+async function loadAdminData() {
+  try {
+    const data = await loadAccounts();
+    accountsData = data;
+    renderAdminAccountsTable(data.accounts);
+    populateAccountSelector(data.accounts);
+  } catch (error) {
+    console.error('Erreur lors du chargement des données admin:', error);
+    alert('Erreur lors du chargement des données');
+  }
+}
+
+// Rendre le tableau des comptes admin
+function renderAdminAccountsTable(accounts) {
+  const tbody = document.getElementById('adminAccountsTableBody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = '';
+  
+  accounts.forEach((account, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <input type="text" class="edit-input" value="${account.name || ''}" 
+               data-field="name" data-index="${index}">
+      </td>
+      <td>
+        <input type="text" class="edit-input" value="${account.personName || ''}" 
+               data-field="personName" data-index="${index}">
+      </td>
+      <td>
+        <input type="number" class="edit-input" value="${account.totalDeposit || 0}" 
+               data-field="totalDeposit" data-index="${index}">
+      </td>
+      <td>
+        <div class="action-buttons">
+          <button class="btn small danger" onclick="deleteAccount(${index})">Supprimer</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Rendre le tableau des données mensuelles
+function renderMonthlyTable(accountIndex) {
+  const tbody = document.getElementById('monthlyDataTableBody');
+  if (!tbody || !accountsData) return;
+  
+  const account = accountsData.accounts[accountIndex];
+  const monthly = account.monthly || [];
+  
+  tbody.innerHTML = '';
+  
+  monthly.forEach((month, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <input type="text" class="edit-input" value="${month.month}" 
+               data-field="month" data-account="${accountIndex}" data-month="${index}">
+      </td>
+      <td>
+        <input type="number" class="edit-input" value="${month.profit}" 
+               data-field="profit" data-account="${accountIndex}" data-month="${index}">
+      </td>
+      <td>
+        <div class="action-buttons">
+          <button class="btn small danger" onclick="deleteMonthlyData(${accountIndex}, ${index})">Supprimer</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Remplir le sélecteur de comptes
+function populateAccountSelector(accounts) {
+  const selector = document.getElementById('accountSelector');
+  if (!selector) return;
+  
+  selector.innerHTML = '<option value="">Choisir un compte...</option>';
+  accounts.forEach((account, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = account.name || account.personName || `Compte ${index + 1}`;
+    selector.appendChild(option);
+  });
+}
+
+// Ajouter un nouveau compte
+function addNewAccount() {
+  if (!accountsData) return;
+  
+  const newAccount = {
+    personName: 'Nouveau Trader',
+    name: 'Nouveau Compte',
+    totalDeposit: 10000,
+    monthly: []
+  };
+  
+  accountsData.accounts.push(newAccount);
+  renderAdminAccountsTable(accountsData.accounts);
+  populateAccountSelector(accountsData.accounts);
+}
+
+// Supprimer un compte
+function deleteAccount(index) {
+  if (!accountsData || !confirm('Êtes-vous sûr de vouloir supprimer ce compte ?')) return;
+  
+  accountsData.accounts.splice(index, 1);
+  renderAdminAccountsTable(accountsData.accounts);
+  populateAccountSelector(accountsData.accounts);
+}
+
+// Ajouter des données mensuelles
+function addMonthlyData() {
+  const selector = document.getElementById('accountSelector');
+  const accountIndex = parseInt(selector.value);
+  
+  if (accountIndex === '' || !accountsData) return;
+  
+  const account = accountsData.accounts[accountIndex];
+  if (!account.monthly) account.monthly = [];
+  
+  const currentDate = new Date();
+  const month = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+  
+  account.monthly.push({
+    month: month,
+    profit: 0
+  });
+  
+  renderMonthlyTable(accountIndex);
+}
+
+// Supprimer des données mensuelles
+function deleteMonthlyData(accountIndex, monthIndex) {
+  if (!accountsData || !confirm('Êtes-vous sûr de vouloir supprimer ces données ?')) return;
+  
+  accountsData.accounts[accountIndex].monthly.splice(monthIndex, 1);
+  renderMonthlyTable(accountIndex);
+}
+
+// Sauvegarder les modifications
+async function saveAdminChanges() {
+  if (!accountsData) return;
+  
+  try {
+    // Mettre à jour les données depuis les inputs
+    updateDataFromInputs();
+    
+    // Sauvegarder dans le fichier (simulation - en réalité il faudrait un serveur)
+    const response = await fetch('data/accounts.json', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(accountsData)
+    });
+    
+    if (response.ok) {
+      alert('Modifications sauvegardées avec succès !');
+      // Recharger les données
+      bootstrap();
+    } else {
+      alert('Erreur lors de la sauvegarde. Les modifications sont temporaires.');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde:', error);
+    alert('Erreur lors de la sauvegarde. Les modifications sont temporaires.');
+  }
+}
+
+// Mettre à jour les données depuis les inputs
+function updateDataFromInputs() {
+  if (!accountsData) return;
+  
+  // Mettre à jour les comptes
+  const accountInputs = document.querySelectorAll('#adminAccountsTableBody input[data-field]');
+  accountInputs.forEach(input => {
+    const field = input.dataset.field;
+    const index = parseInt(input.dataset.index);
+    
+    if (accountsData.accounts[index]) {
+      if (field === 'totalDeposit') {
+        accountsData.accounts[index][field] = parseFloat(input.value) || 0;
+      } else {
+        accountsData.accounts[index][field] = input.value;
+      }
+    }
+  });
+  
+  // Mettre à jour les données mensuelles
+  const monthlyInputs = document.querySelectorAll('#monthlyDataTableBody input[data-field]');
+  monthlyInputs.forEach(input => {
+    const field = input.dataset.field;
+    const accountIndex = parseInt(input.dataset.account);
+    const monthIndex = parseInt(input.dataset.month);
+    
+    if (accountsData.accounts[accountIndex] && accountsData.accounts[accountIndex].monthly[monthIndex]) {
+      if (field === 'profit') {
+        accountsData.accounts[accountIndex].monthly[monthIndex][field] = parseFloat(input.value) || 0;
+      } else {
+        accountsData.accounts[accountIndex].monthly[monthIndex][field] = input.value;
+      }
+    }
+  });
+}
+
+// Gestion des onglets admin
+function switchAdminTab(tabName) {
+  // Masquer tous les onglets
+  document.querySelectorAll('.admin-tab-panel').forEach(panel => {
+    panel.style.display = 'none';
+  });
+  
+  // Désactiver tous les boutons d'onglet
+  document.querySelectorAll('.admin-tabs .tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Afficher l'onglet sélectionné
+  const targetPanel = document.getElementById(`admin${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`);
+  const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
+  
+  if (targetPanel) targetPanel.style.display = 'block';
+  if (targetBtn) targetBtn.classList.add('active');
+}
+
+// Initialisation des événements admin
+function initAdminEvents() {
+  // Lien admin
+  const adminLink = document.getElementById('adminLink');
+  if (adminLink) {
+    adminLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAdminAuth();
+    });
+  }
+  
+  // Formulaire d'authentification
+  const authForm = document.getElementById('adminAuthForm');
+  if (authForm) {
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('adminPassword').value;
+      
+      if (authenticateAdmin(password)) {
+        isAdminAuthenticated = true;
+        closeAdminAuth();
+        openAdminPanel();
+        showAdminLink();
+      } else {
+        alert('Mot de passe incorrect');
+      }
+    });
+  }
+  
+  // Boutons d'annulation
+  const cancelAuth = document.getElementById('cancelAuth');
+  if (cancelAuth) {
+    cancelAuth.addEventListener('click', closeAdminAuth);
+  }
+  
+  const adminAuthClose = document.getElementById('adminAuthClose');
+  if (adminAuthClose) {
+    adminAuthClose.addEventListener('click', closeAdminAuth);
+  }
+  
+  const adminPanelClose = document.getElementById('adminPanelClose');
+  if (adminPanelClose) {
+    adminPanelClose.addEventListener('click', closeAdminPanel);
+  }
+  
+  // Boutons du panneau admin
+  const addAccountBtn = document.getElementById('addAccountBtn');
+  if (addAccountBtn) {
+    addAccountBtn.addEventListener('click', addNewAccount);
+  }
+  
+  const saveChangesBtn = document.getElementById('saveChangesBtn');
+  if (saveChangesBtn) {
+    saveChangesBtn.addEventListener('click', saveAdminChanges);
+  }
+  
+  const addMonthlyBtn = document.getElementById('addMonthlyBtn');
+  if (addMonthlyBtn) {
+    addMonthlyBtn.addEventListener('click', addMonthlyData);
+  }
+  
+  // Sélecteur de compte
+  const accountSelector = document.getElementById('accountSelector');
+  if (accountSelector) {
+    accountSelector.addEventListener('change', (e) => {
+      const accountIndex = parseInt(e.target.value);
+      const container = document.getElementById('monthlyDataContainer');
+      
+      if (accountIndex !== '' && container) {
+        container.style.display = 'block';
+        renderMonthlyTable(accountIndex);
+      } else if (container) {
+        container.style.display = 'none';
+      }
+    });
+  }
+  
+  // Onglets admin
+  document.querySelectorAll('.admin-tabs .tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabName = btn.dataset.tab;
+      switchAdminTab(tabName);
+    });
+  });
+  
+  // Fermeture des modales au clic sur le backdrop
+  const authModal = document.getElementById('adminAuthModal');
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) closeAdminAuth();
+    });
+  }
+  
+  const panelModal = document.getElementById('adminPanelModal');
+  if (panelModal) {
+    panelModal.addEventListener('click', (e) => {
+      if (e.target === panelModal) closeAdminPanel();
+    });
+  }
+}
+
+// Initialiser les événements admin
+initAdminEvents();
+
 

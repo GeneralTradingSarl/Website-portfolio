@@ -22,6 +22,7 @@
       <nav class="site-nav" aria-label="Navegação principal">
         <a href="#tabela" class="nav-link">Tabela</a>
         <a href="#accounts" class="nav-link">Portfólio</a>
+        <a href="#admin" class="nav-link admin-link" id="adminLink" style="display: none;">Admin</a>
       </nav>
     </header>
 
@@ -79,6 +80,95 @@
           </div>
           <div id="tabpanel-trades" class="tab-panel" role="tabpanel" hidden>
             <div id="tradesContainer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Authentication Modal -->
+    <div id="adminAuthModal" class="modal-backdrop" hidden>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="adminAuthTitle">
+        <button class="modal-close" id="adminAuthClose" aria-label="Fechar">×</button>
+        <div class="modal-header">
+          <h3 id="adminAuthTitle">Accès Administrateur</h3>
+        </div>
+        <div class="modal-body">
+          <form id="adminAuthForm">
+            <div class="form-group">
+              <label for="adminPassword">Mot de passe administrateur :</label>
+              <input type="password" id="adminPassword" class="form-input" placeholder="Entrez le mot de passe" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn">Se connecter</button>
+              <button type="button" class="btn secondary" id="cancelAuth">Annuler</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminPanelModal" class="modal-backdrop" hidden>
+      <div class="modal-dialog admin-modal" role="dialog" aria-modal="true" aria-labelledby="adminPanelTitle">
+        <button class="modal-close" id="adminPanelClose" aria-label="Fechar">×</button>
+        <div class="modal-header">
+          <h3 id="adminPanelTitle">Panneau Administrateur</h3>
+          <div class="admin-actions">
+            <button id="addAccountBtn" class="btn">Ajouter un compte</button>
+            <button id="saveChangesBtn" class="btn primary">Sauvegarder</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="admin-tabs" role="tablist">
+            <button class="tab-btn active" data-tab="accounts">Comptes</button>
+            <button class="tab-btn" data-tab="monthly">Données mensuelles</button>
+          </div>
+          
+          <div id="adminAccountsTab" class="admin-tab-panel">
+            <div class="admin-table-container">
+              <table class="admin-table" id="adminAccountsTable">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Nom de la personne</th>
+                    <th>Dépôt total</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminAccountsTableBody">
+                  <!-- Rempli dynamiquement -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div id="adminMonthlyTab" class="admin-tab-panel" style="display: none;">
+            <div class="monthly-editor">
+              <div class="account-selector">
+                <label for="accountSelector">Sélectionner un compte :</label>
+                <select id="accountSelector" class="form-input">
+                  <option value="">Choisir un compte...</option>
+                </select>
+              </div>
+              <div id="monthlyDataContainer" style="display: none;">
+                <h4>Données mensuelles</h4>
+                <div class="monthly-table-container">
+                  <table class="admin-table" id="monthlyDataTable">
+                    <thead>
+                      <tr>
+                        <th>Mois</th>
+                        <th>Profit</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="monthlyDataTableBody">
+                      <!-- Rempli dynamiquement -->
+                    </tbody>
+                  </table>
+                  <button id="addMonthlyBtn" class="btn">Ajouter un mois</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
